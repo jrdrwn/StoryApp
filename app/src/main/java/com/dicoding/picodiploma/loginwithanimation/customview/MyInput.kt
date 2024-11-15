@@ -17,10 +17,26 @@ class MyInput @JvmOverloads constructor(
     ) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
 
-        if (inputType == InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS + 1) {
-            validateEmail(text)
-        } else if (inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD + 1) {
-            validatePassword(text)
+        when (inputType) {
+            InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS + 1 -> {
+                validateEmail(text)
+            }
+
+            InputType.TYPE_TEXT_VARIATION_PASSWORD + 1 -> {
+                validatePassword(text)
+            }
+
+            InputType.TYPE_CLASS_TEXT -> {
+                validateText(text)
+            }
+        }
+    }
+
+    private fun validateText(text: CharSequence?) {
+        if (text.toString().isEmpty()) {
+            setError("Nama tidak boleh kosong", null)
+        } else {
+            error = null
         }
     }
 
