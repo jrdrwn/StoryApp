@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LoginWithAnimation</string>
+    <string name="app_name">StoryApp</string>
     <string name="signup">Daftar</string>
     <string name="login">Masuk</string>
     <string name="message_welcome_page">Mau belajar Android, iOS, Machine Learning, Cloud, Front-End, Back-End, dan bidang IT lainnya? Di Dicoding aja!</string>
@@ -15,4 +15,6 @@
     <string name="logout">Keluar</string>
     <string name="oops_something_went_wrong">Kesalahan tidak diketahui\n</string>
     <string name="try_again">Coba lagi\n</string>
+    <string name="logout_title">Logout</string>
+    <string name="gambar_item">Gambar Item</string>
 </resources>

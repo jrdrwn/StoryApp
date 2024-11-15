@@ -1,18 +1,23 @@
 package com.dicoding.picodiploma.loginwithanimation.view.main
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.dicoding.picodiploma.loginwithanimation.R
+import com.dicoding.picodiploma.loginwithanimation.data.Result
+import com.dicoding.picodiploma.loginwithanimation.data.adapter.ListStoryAdapter
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
     private val viewModel by viewModels<MainViewModel> {
@@ -32,9 +37,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        setupView()
         setupAction()
-        playAnimation()
     }
 
     private fun setupView() {
@@ -47,33 +50,48 @@ class MainActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
         }
-        supportActionBar?.hide()
     }
 
     private fun setupAction() {
-        viewModel.getSession().observe(this) { user ->
-            binding.nameTextView.text = user.email
-        }
-        binding.logoutButton.setOnClickListener {
-            viewModel.logout()
+        viewModel.getStories().observe(this) { result ->
+            if (result != null) {
+                when (result) {
+                    is Result.Loading -> {
+                        binding.progressBar.visibility = View.VISIBLE
+                    }
+
+                    is Result.Success -> {
+                        binding.progressBar.visibility = View.GONE
+                        binding.rvStories.layoutManager = LinearLayoutManager(this)
+                        val adapter = ListStoryAdapter(result.data.listStory)
+                        binding.rvStories.adapter = adapter
+                    }
+
+                    is Result.Error -> {
+                        binding.progressBar.visibility = View.GONE
+                        Snackbar.make(binding.root, result.error, Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Retry") {
+                                setupAction()
+                            }.show()
+                    }
+                }
+            }
         }
     }
 
-    private fun playAnimation() {
-        ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
-            duration = 6000
-            repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.REVERSE
-        }.start()
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.action_bar, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
-        val name = ObjectAnimator.ofFloat(binding.nameTextView, View.ALPHA, 1f).setDuration(100)
-        val message =
-            ObjectAnimator.ofFloat(binding.messageTextView, View.ALPHA, 1f).setDuration(100)
-        val logout = ObjectAnimator.ofFloat(binding.logoutButton, View.ALPHA, 1f).setDuration(100)
-
-        AnimatorSet().apply {
-            playSequentially(name, message, logout)
-            startDelay = 100
-        }.start()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_logout -> {
+                viewModel.logout()
+                startActivity(Intent(this, WelcomeActivity::class.java))
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
