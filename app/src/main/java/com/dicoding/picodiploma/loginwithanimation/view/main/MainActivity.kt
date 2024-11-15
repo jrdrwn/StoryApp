@@ -51,6 +51,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
+        viewModel.getSession().observe(this) { user ->
+            binding.nameTextView.text = user.email
+        }
         binding.logoutButton.setOnClickListener {
             viewModel.logout()
         }

@@ -11,10 +11,12 @@ import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.dicoding.picodiploma.loginwithanimation.data.Result
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityLoginBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainActivity
+import com.google.android.material.snackbar.Snackbar
 
 class LoginActivity : AppCompatActivity() {
     private val viewModel by viewModels<LoginViewModel> {
@@ -48,18 +50,46 @@ class LoginActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.loginButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
-            viewModel.saveSession(UserModel(email, "sample_token"))
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
-                setPositiveButton("Lanjut") { _, _ ->
-                    val intent = Intent(context, MainActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                    startActivity(intent)
-                    finish()
+            val password = binding.passwordEditText.text.toString()
+            viewModel.login(email, password).observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.loginButton.visibility = View.GONE
+                        }
+
+                        is Result.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.loginButton.visibility = View.VISIBLE
+                            viewModel.saveSession(
+                                UserModel(
+                                    email,
+                                    result.data.loginResult?.token!!
+                                )
+                            )
+                            AlertDialog.Builder(this).apply {
+                                setTitle("Yeah!")
+                                setMessage("Anda berhasil login. Sudah tidak sabar untuk berbagi cerita ya?")
+                                setPositiveButton("Lanjut") { _, _ ->
+                                    val intent = Intent(context, MainActivity::class.java)
+                                    intent.flags =
+                                        Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                                    startActivity(intent)
+                                    finish()
+                                }
+                                create()
+                                show()
+                            }
+                        }
+
+                        is Result.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.loginButton.visibility = View.VISIBLE
+                            Snackbar.make(binding.root, result.error, Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
                 }
-                create()
-                show()
             }
         }
     }

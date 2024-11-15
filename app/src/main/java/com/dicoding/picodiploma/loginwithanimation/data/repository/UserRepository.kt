@@ -1,4 +1,4 @@
-package com.dicoding.picodiploma.loginwithanimation.data
+package com.dicoding.picodiploma.loginwithanimation.data.repository
 
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference

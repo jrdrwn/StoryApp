@@ -7,12 +7,20 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.dicoding.picodiploma.loginwithanimation.data.Result
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivitySignupBinding
+import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.google.android.material.snackbar.Snackbar
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
+
+    private val viewModel by viewModels<SignupViewModel> {
+        ViewModelFactory.getInstance(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,16 +48,40 @@ class SignupActivity : AppCompatActivity() {
     private fun setupAction() {
         binding.signupButton.setOnClickListener {
             val email = binding.emailEditText.text.toString()
+            val name = binding.nameEditText.text.toString()
+            val password = binding.passwordEditText.text.toString()
 
-            AlertDialog.Builder(this).apply {
-                setTitle("Yeah!")
-                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
-                setPositiveButton("Lanjut") { _, _ ->
-                    finish()
+            viewModel.register(name, email, password).observe(this) { result ->
+                if (result != null) {
+                    when (result) {
+                        is Result.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.signupButton.visibility = View.GONE
+                        }
+
+                        is Result.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.signupButton.visibility = View.VISIBLE
+                            AlertDialog.Builder(this).apply {
+                                setTitle("Yeah!")
+                                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
+                                setPositiveButton("Lanjut") { _, _ ->
+                                    finish()
+                                }
+                                create()
+                                show()
+                            }
+                        }
+
+                        is Result.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.signupButton.visibility = View.VISIBLE
+                            Snackbar.make(binding.root, result.error, Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
                 }
-                create()
-                show()
             }
+
         }
     }
 

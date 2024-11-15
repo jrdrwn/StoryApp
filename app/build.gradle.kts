@@ -55,4 +55,9 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
     implementation("androidx.activity:activity-ktx:1.7.2")
 
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.androidx.lifecycle.runtime.ktx) // untuk lifecycleScope
+
 }
