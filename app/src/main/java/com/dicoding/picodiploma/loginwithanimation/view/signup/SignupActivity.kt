@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.picodiploma.loginwithanimation.data.Result
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivitySignupBinding
@@ -62,15 +62,12 @@ class SignupActivity : AppCompatActivity() {
                         is Result.Success -> {
                             binding.progressBar.visibility = View.GONE
                             binding.signupButton.visibility = View.VISIBLE
-                            AlertDialog.Builder(this).apply {
-                                setTitle("Yeah!")
-                                setMessage("Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.")
-                                setPositiveButton("Lanjut") { _, _ ->
-                                    finish()
-                                }
-                                create()
-                                show()
-                            }
+                            Toast.makeText(
+                                this,
+                                "Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            finish()
                         }
 
                         is Result.Error -> {
