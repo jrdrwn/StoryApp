@@ -16,6 +16,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.Result
 import com.dicoding.picodiploma.loginwithanimation.data.adapter.ListStoryAdapter
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityMainBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.createstory.CreateStoryActivity
 import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 import com.google.android.material.snackbar.Snackbar
 
@@ -53,6 +54,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupAction() {
+        binding.buttonAdd.setOnClickListener {
+            startActivity(Intent(this, CreateStoryActivity::class.java))
+        }
+
         viewModel.getStories().observe(this) { result ->
             if (result != null) {
                 when (result) {

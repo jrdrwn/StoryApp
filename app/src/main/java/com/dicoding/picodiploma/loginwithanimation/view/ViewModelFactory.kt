@@ -7,6 +7,7 @@ import com.dicoding.picodiploma.loginwithanimation.data.repository.AuthRepositor
 import com.dicoding.picodiploma.loginwithanimation.data.repository.StoryRepository
 import com.dicoding.picodiploma.loginwithanimation.data.repository.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.di.Injection
+import com.dicoding.picodiploma.loginwithanimation.view.createstory.CreateStoryViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.detail.DetailViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.login.LoginViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainViewModel
@@ -36,6 +37,10 @@ class ViewModelFactory(
 
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
                 DetailViewModel(storyRepository) as T
+            }
+
+            modelClass.isAssignableFrom(CreateStoryViewModel::class.java) -> {
+                CreateStoryViewModel(storyRepository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)

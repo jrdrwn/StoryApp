@@ -64,4 +64,6 @@ dependencies {
 
     implementation(libs.glide)
 
+    implementation(libs.androidx.exifinterface)
+
 }
