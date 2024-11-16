@@ -1,6 +1,8 @@
 package com.dicoding.picodiploma.loginwithanimation.di
 
 import android.content.Context
+import com.dicoding.picodiploma.loginwithanimation.AppExecutors
+import com.dicoding.picodiploma.loginwithanimation.data.db.StoryRoomDatabase
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserPreference
 import com.dicoding.picodiploma.loginwithanimation.data.pref.dataStore
 import com.dicoding.picodiploma.loginwithanimation.data.repository.AuthRepository
@@ -23,6 +25,8 @@ object Injection {
         val pref = UserPreference.getInstance(context.dataStore)
         val user = runBlocking { pref.getSession().first() }
         val apiService = ApiConfig.getApiService(user.token)
-        return StoryRepository.getInstance(apiService)
+        val appExecutors = AppExecutors()
+        val storyDao = StoryRoomDatabase.getDatabase(context).storyDao()
+        return StoryRepository.getInstance(apiService, appExecutors, storyDao)
     }
 }

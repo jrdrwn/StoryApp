@@ -18,4 +18,7 @@
     <string name="logout_title">Logout</string>
     <string name="gambar_item">Gambar Item</string>
     <string name="tambah_story_baru">Tambah story baru</string>
+    <string name="appwidget_text">Stories</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
 </resources>

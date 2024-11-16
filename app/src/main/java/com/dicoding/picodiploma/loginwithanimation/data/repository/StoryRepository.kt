@@ -2,10 +2,14 @@ package com.dicoding.picodiploma.loginwithanimation.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import com.dicoding.picodiploma.loginwithanimation.AppExecutors
 import com.dicoding.picodiploma.loginwithanimation.data.Result
+import com.dicoding.picodiploma.loginwithanimation.data.db.Story
+import com.dicoding.picodiploma.loginwithanimation.data.db.StoryDao
 import com.dicoding.picodiploma.loginwithanimation.data.response.AddStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.response.DetailStoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.response.ErrorResponse
+import com.dicoding.picodiploma.loginwithanimation.data.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.data.response.StoryResponse
 import com.dicoding.picodiploma.loginwithanimation.data.retrofit.ApiService
 import com.google.gson.Gson
@@ -20,6 +24,8 @@ import java.io.File
 
 class StoryRepository private constructor(
     private val apiService: ApiService,
+    private val appExecutors: AppExecutors,
+    private val storyDao: StoryDao
 ) {
     private val getStoriesResult = MediatorLiveData<Result<StoryResponse>>()
     private val getDetailStoryResult = MediatorLiveData<Result<DetailStoryResponse>>()
@@ -34,7 +40,21 @@ class StoryRepository private constructor(
                 response: Response<StoryResponse>
             ) {
                 if (response.isSuccessful) {
-                    getStoriesResult.value = Result.Success(response.body()!!)
+                    val stories = response.body()?.listStory
+                    val storiesList = ArrayList<Story>()
+                    appExecutors.diskIO.execute {
+                        stories?.forEach {
+                            val story = Story(
+                                storyId = it.id,
+                                name = it.name,
+                                description = it.description,
+                                photoUrl = it.photoUrl
+                            )
+                            storiesList.add(story)
+                        }
+                        storyDao.deleteAllStories()
+                        storyDao.insertAll(storiesList)
+                    }
                 } else {
                     val jsonInString = response.errorBody()?.string()
                     val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
@@ -46,6 +66,17 @@ class StoryRepository private constructor(
                 getStoriesResult.value = Result.Error(t.message.toString())
             }
         })
+        val localData = storyDao.getAllStories()
+        getStoriesResult.addSource(localData) {
+            getStoriesResult.value = Result.Success(StoryResponse(listStory = it.map { story ->
+                ListStoryItem(
+                    id = story.storyId,
+                    name = story.name,
+                    description = story.description,
+                    photoUrl = story.photoUrl
+                )
+            }))
+        }
         return getStoriesResult
     }
 
@@ -114,10 +145,12 @@ class StoryRepository private constructor(
         @Volatile
         private var instance: StoryRepository? = null
         fun getInstance(
-            apiService: ApiService
+            apiService: ApiService,
+            appExecutors: AppExecutors,
+            storyDao: StoryDao
         ): StoryRepository =
             instance ?: synchronized(this) {
-                instance ?: StoryRepository(apiService)
+                instance ?: StoryRepository(apiService, appExecutors, storyDao)
             }.also { instance = it }
     }
 }
