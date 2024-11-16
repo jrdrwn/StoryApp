@@ -1,13 +1,11 @@
 package com.dicoding.picodiploma.loginwithanimation.view.main
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,24 +31,14 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
-                startActivity(Intent(this, WelcomeActivity::class.java))
-                finish()
+                val intent = Intent(this, WelcomeActivity::class.java)
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             }
         }
 
         setupAction()
-    }
-
-    private fun setupView() {
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
     }
 
     private fun setupAction() {
@@ -75,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                     is Result.Error -> {
                         binding.progressBar.visibility = View.GONE
                         Snackbar.make(binding.root, result.error, Snackbar.LENGTH_INDEFINITE)
-                            .setAction("Retry") {
+                            .setAction(getString(R.string.retry)) {
                                 setupAction()
                             }.show()
                     }
@@ -97,6 +85,10 @@ class MainActivity : AppCompatActivity() {
                 intent.flags =
                     Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
+            }
+            R.id.action_language -> {
+                startActivity(Intent(Settings.ACTION_LOCALE_SETTINGS))
+
             }
         }
         return super.onOptionsItemSelected(item)

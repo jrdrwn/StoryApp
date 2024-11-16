@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.Result
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivitySignupBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
@@ -66,7 +67,7 @@ class SignupActivity : AppCompatActivity() {
                             binding.signupButton.visibility = View.VISIBLE
                             Toast.makeText(
                                 this,
-                                "Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.",
+                                getString(R.string.success_signup, email),
                                 Toast.LENGTH_SHORT
                             ).show()
                             val intent = Intent(this, WelcomeActivity::class.java)

@@ -142,15 +142,10 @@ class StoryRepository private constructor(
     }
 
     companion object {
-        @Volatile
-        private var instance: StoryRepository? = null
         fun getInstance(
             apiService: ApiService,
             appExecutors: AppExecutors,
             storyDao: StoryDao
-        ): StoryRepository =
-            instance ?: synchronized(this) {
-                instance ?: StoryRepository(apiService, appExecutors, storyDao)
-            }.also { instance = it }
+        ): StoryRepository = StoryRepository(apiService, appExecutors, storyDao)
     }
 }

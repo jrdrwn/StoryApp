@@ -8,7 +8,6 @@ import com.dicoding.picodiploma.loginwithanimation.data.repository.StoryReposito
 import com.dicoding.picodiploma.loginwithanimation.data.repository.UserRepository
 import com.dicoding.picodiploma.loginwithanimation.di.Injection
 import com.dicoding.picodiploma.loginwithanimation.view.createstory.CreateStoryViewModel
-import com.dicoding.picodiploma.loginwithanimation.view.detail.DetailViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.login.LoginViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.main.MainViewModel
 import com.dicoding.picodiploma.loginwithanimation.view.signup.SignupViewModel
@@ -35,9 +34,6 @@ class ViewModelFactory(
                 SignupViewModel(authRepository) as T
             }
 
-            modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
-                DetailViewModel(storyRepository) as T
-            }
 
             modelClass.isAssignableFrom(CreateStoryViewModel::class.java) -> {
                 CreateStoryViewModel(storyRepository) as T
@@ -48,21 +44,13 @@ class ViewModelFactory(
     }
 
     companion object {
-        @Volatile
-        private var INSTANCE: ViewModelFactory? = null
-
         @JvmStatic
-        fun getInstance(context: Context): ViewModelFactory {
-            if (INSTANCE == null) {
-                synchronized(ViewModelFactory::class.java) {
-                    INSTANCE = ViewModelFactory(
+        fun getInstance(context: Context): ViewModelFactory = ViewModelFactory(
                         Injection.provideRepository(context),
-                        Injection.provideAuthRepository(context),
+            Injection.provideAuthRepository(),
                         Injection.provideStoryRepository(context)
                     )
-                }
-            }
-            return INSTANCE as ViewModelFactory
-        }
+
+
     }
 }

@@ -5,12 +5,14 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.Result
 import com.dicoding.picodiploma.loginwithanimation.data.pref.UserModel
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityLoginBinding
@@ -62,16 +64,17 @@ class LoginActivity : AppCompatActivity() {
                         is Result.Success -> {
                             binding.progressBar.visibility = View.GONE
                             binding.loginButton.visibility = View.VISIBLE
+                            Log.d("LoginActivity", "Token: ${result.data.loginResult?.token}")
                             viewModel.saveSession(
                                 UserModel(
                                     email,
-                                    result.data.loginResult?.token!!,
-                                    true
+                                    result.data.loginResult?.token!!
                                 )
                             )
+
                             Toast.makeText(
                                 this,
-                                "Anda berhasil login. Sudah tidak sabar untuk berbagi cerita ya?",
+                                getString(R.string.success_login),
                                 Toast.LENGTH_SHORT
                             ).show()
                             val intent = Intent(this, MainActivity::class.java)

@@ -18,8 +18,10 @@ object Injection {
         return UserRepository.getInstance(pref)
     }
 
-    fun provideAuthRepository(context: Context) =
-        AuthRepository.getInstance(ApiConfig.getApiService())
+    fun provideAuthRepository(): AuthRepository {
+        return AuthRepository.getInstance(ApiConfig.getApiService())
+
+    }
 
     fun provideStoryRepository(context: Context): StoryRepository {
         val pref = UserPreference.getInstance(context.dataStore)

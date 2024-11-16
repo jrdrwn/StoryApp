@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">StoryApp</string>
+    <string name="signup">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="message_welcome_page">Want to learn Android, iOS, Machine Learning, Cloud, Front-End, Back-End, and other IT fields? Just at Dicoding!</string>
+    <string name="title_welcome_page">Welcome to Dicoding Story!</string>
+    <string name="title_signup_page">Complete your data below</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="message_login_page">Please enter your data first</string>
+    <string name="title_login_page">Ready to share your story?</string>
+    <string name="name">Name</string>
+    <string name="message_main_page">Happy Learning at Dicoding.</string>
+    <string name="greeting">Hello %1$s,</string>
+    <string name="logout">Logout</string>
+    <string name="oops_something_went_wrong">Unknown error\n</string>
+    <string name="try_again">Try again\n</string>
+    <string name="logout_title">Logout</string>
+    <string name="gambar_item">Item Image</string>
+    <string name="tambah_story_baru">Add new story</string>
+    <string name="appwidget_text">Stories</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="title_camera">Camera</string>
+    <string name="title_gallery">Gallery</string>
+    <string name="hint_description">Type description here…</string>
+    <string name="title_upload">Upload</string>
+    <string name="no_data">NO DATA</string>
+    <string name="success_signup">Account with %s is created. Let\'s login and see the stories.</string>
+    <string name="retry">Retry</string>
+    <string name="s_story">%1$s\'s Story</string>
+    <string name="failed_to_load_story">Failed to load story</string>
+    <string name="success_login">You have successfully logged in. Can\'t wait to share your story?</string>
+    <string name="name_validation_msg">Name cannot be empty</string>
+    <string name="email_validation_msg">Invalid email</string>
+    <string name="pass_validation_msg">Password must be at least 8 characters</string>
+    <string name="no_image_selected">No image selected</string>
+    <string name="change_language_title">Change Language</string>
+    <string name="add_story">Create new story</string>
+</resources>

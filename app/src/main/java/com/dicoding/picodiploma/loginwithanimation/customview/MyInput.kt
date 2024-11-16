@@ -3,6 +3,7 @@ package com.dicoding.picodiploma.loginwithanimation.customview
 import android.content.Context
 import android.text.InputType
 import android.util.AttributeSet
+import com.dicoding.picodiploma.loginwithanimation.R
 import com.google.android.material.textfield.TextInputEditText
 
 class MyInput @JvmOverloads constructor(
@@ -34,7 +35,7 @@ class MyInput @JvmOverloads constructor(
 
     private fun validateText(text: CharSequence?) {
         if (text.toString().isEmpty()) {
-            setError("Nama tidak boleh kosong", null)
+            setError(context.getString(R.string.name_validation_msg), null)
         } else {
             error = null
         }
@@ -42,7 +43,7 @@ class MyInput @JvmOverloads constructor(
 
     private fun validateEmail(text: CharSequence?) {
         if (!text.toString().contains("@") || !text.toString().contains(".")) {
-            setError("Email tidak valid", null)
+            setError(context.getString(R.string.email_validation_msg), null)
         } else {
             error = null
         }
@@ -50,7 +51,7 @@ class MyInput @JvmOverloads constructor(
 
     private fun validatePassword(text: CharSequence?) {
         if (text.toString().length < 8) {
-            setError("Password tidak boleh kurang dari 8 karakter", null)
+            setError(context.getString(R.string.pass_validation_msg), null)
         } else {
             error = null
         }

@@ -7,6 +7,7 @@
     tools:context=".view.signup.SignupActivity">
 
     <ImageView
+        android:contentDescription="@string/gambar_item"
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"

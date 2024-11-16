@@ -10,6 +10,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.Result
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityCreateStoryBinding
 import com.dicoding.picodiploma.loginwithanimation.getImageUri
@@ -31,7 +32,19 @@ class CreateStoryActivity : AppCompatActivity() {
         binding = ActivityCreateStoryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        supportActionBar?.apply {
+            title = getString(R.string.add_story)
+            setDisplayHomeAsUpEnabled(true)
+        }
+
+
         setupAction()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
     }
 
     private fun setupAction() {
@@ -109,7 +122,7 @@ class CreateStoryActivity : AppCompatActivity() {
                 }
             }
 
-        } ?: showToast("No image selected")
+        } ?: showToast(getString(R.string.no_image_selected))
     }
 
     private fun showToast(message: String) {

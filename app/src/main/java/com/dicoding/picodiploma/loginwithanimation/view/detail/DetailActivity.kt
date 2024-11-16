@@ -3,22 +3,17 @@ package com.dicoding.picodiploma.loginwithanimation.view.detail
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.bumptech.glide.Glide
 import com.dicoding.picodiploma.loginwithanimation.R
 import com.dicoding.picodiploma.loginwithanimation.data.DetailStory
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivityDetailBinding
-import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.loadImage
 import com.google.android.material.snackbar.Snackbar
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailBinding
-    private val viewModel by viewModels<DetailViewModel> {
-        ViewModelFactory.getInstance(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,17 +30,19 @@ class DetailActivity : AppCompatActivity() {
         }
 
         if (story != null) {
-            binding.progressBar.visibility = View.GONE
-            binding.tvDetailName.text = story.name
-            binding.tvDetailDescription.text = story.description
+            binding.apply {
+                progressBar.visibility = View.GONE
+                tvDetailName.text = story.name
+                tvDetailDescription.text = story.description
+                ivDetailPhoto.loadImage(story.photoUrl)
+            }
 
-            Glide.with(this)
-                .load(story.photoUrl)
-                .into(binding.ivDetailPhoto)
-
-            supportActionBar?.title = "${story.name}'s Story"
+            supportActionBar?.title = getString(R.string.s_story, story.name)
         } else {
-            Snackbar.make(binding.root, "Failed to load story", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(
+                binding.root,
+                getString(R.string.failed_to_load_story), Snackbar.LENGTH_SHORT
+            ).show()
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

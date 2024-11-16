@@ -13,7 +13,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class AuthRepository private constructor(
-    private val apiService: ApiService,
+    private val apiService: ApiService
 ) {
     private val registerResult = MediatorLiveData<Result<RegisterResponse>>()
     private val loginResult = MediatorLiveData<Result<LoginResponse>>()
@@ -76,13 +76,8 @@ class AuthRepository private constructor(
     }
 
     companion object {
-        @Volatile
-        private var instance: AuthRepository? = null
         fun getInstance(
             apiService: ApiService
-        ): AuthRepository =
-            instance ?: synchronized(this) {
-                instance ?: AuthRepository(apiService)
-            }.also { instance = it }
+        ) = AuthRepository(apiService)
     }
 }

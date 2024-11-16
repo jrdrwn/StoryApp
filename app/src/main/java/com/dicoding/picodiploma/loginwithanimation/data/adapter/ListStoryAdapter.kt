@@ -8,10 +8,10 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.util.Pair
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.bumptech.glide.Glide
 import com.dicoding.picodiploma.loginwithanimation.data.DetailStory
 import com.dicoding.picodiploma.loginwithanimation.data.response.ListStoryItem
 import com.dicoding.picodiploma.loginwithanimation.databinding.ListItemBinding
+import com.dicoding.picodiploma.loginwithanimation.loadImage
 import com.dicoding.picodiploma.loginwithanimation.view.detail.DetailActivity
 
 class ListStoryAdapter(private val listStory: List<ListStoryItem>) :
@@ -32,10 +32,7 @@ class ListStoryAdapter(private val listStory: List<ListStoryItem>) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(listStoryItem: ListStoryItem) {
             with(binding as ListItemBinding) {
-
-                Glide.with(root)
-                    .load(listStoryItem.photoUrl)
-                    .into(ivItemPhoto)
+                ivItemPhoto.loadImage(listStoryItem.photoUrl)
 
                 tvItemName.text = listStoryItem.name
                 tvItemDescription.text = listStoryItem.description
