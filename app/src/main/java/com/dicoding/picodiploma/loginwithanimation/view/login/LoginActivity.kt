@@ -65,7 +65,8 @@ class LoginActivity : AppCompatActivity() {
                             viewModel.saveSession(
                                 UserModel(
                                     email,
-                                    result.data.loginResult?.token!!
+                                    result.data.loginResult?.token!!,
+                                    true
                                 )
                             )
                             Toast.makeText(
@@ -77,7 +78,6 @@ class LoginActivity : AppCompatActivity() {
                             intent.flags =
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                             startActivity(intent)
-                            finish()
                         }
 
                         is Result.Error -> {

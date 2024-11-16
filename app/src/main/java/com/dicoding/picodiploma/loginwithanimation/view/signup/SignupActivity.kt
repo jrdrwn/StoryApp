@@ -2,6 +2,7 @@ package com.dicoding.picodiploma.loginwithanimation.view.signup
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.picodiploma.loginwithanimation.data.Result
 import com.dicoding.picodiploma.loginwithanimation.databinding.ActivitySignupBinding
 import com.dicoding.picodiploma.loginwithanimation.view.ViewModelFactory
+import com.dicoding.picodiploma.loginwithanimation.view.welcome.WelcomeActivity
 import com.google.android.material.snackbar.Snackbar
 
 class SignupActivity : AppCompatActivity() {
@@ -67,7 +69,10 @@ class SignupActivity : AppCompatActivity() {
                                 "Akun dengan $email sudah jadi nih. Yuk, login dan belajar coding.",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            finish()
+                            val intent = Intent(this, WelcomeActivity::class.java)
+                            intent.flags =
+                                Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                            startActivity(intent)
                         }
 
                         is Result.Error -> {

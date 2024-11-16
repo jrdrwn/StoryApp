@@ -93,8 +93,10 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_logout -> {
                 viewModel.logout()
-                startActivity(Intent(this, WelcomeActivity::class.java))
-                finish()
+                val intent = Intent(this, WelcomeActivity::class.java)
+                intent.flags =
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
             }
         }
         return super.onOptionsItemSelected(item)
